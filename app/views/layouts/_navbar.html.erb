@@ -1,6 +1,6 @@
 <div class="top-bar" id="main-menu">
   <div class="top-bar-title">
-    <%= image_tag "DiaperBase-Logo.png", alt: "DiaperBase Logo", id: "logo" %>
+    
 
     <span class="menu-hamburger" data-responsive-toggle="responsive-menu" data-hide-for="medium">
       <span class="menu-text" data-toggle>Menu</span>
@@ -23,7 +23,7 @@
             <li><%= navigation_link_to('New Donation', new_donation_path) %></li>
             <li><%= navigation_link_to('Repackaged Donation', scale_donations_path) %></li>
           </ul>
-        </li>        
+        </li>
         <li><%= navigation_link_to('Distributions', distributions_path)   %></li>
         <li class="has-submenu">
           <a href="javascript:void(0)">Inventory</a>

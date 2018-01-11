@@ -130,6 +130,8 @@ GEM
       factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     ffi (1.9.18)
+    font-awesome-rails (4.7.0.3)
+      railties (>= 3.2, < 5.2)
     formatador (0.2.5)
     foundation-rails (6.3.1.0)
       railties (>= 3.1.0)
@@ -380,6 +382,7 @@ DEPENDENCIES
   devise_invitable
   dotenv-rails (~> 2.2)
   factory_bot_rails (~> 4.8)
+  font-awesome-rails
   foundation-rails (~> 6.3.0)
   foundation_rails_helper (>= 3.0.0.rc2, < 4.0)
   groupdate (~> 3.2)
@@ -415,4 +418,4 @@ DEPENDENCIES
   yajl-ruby
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

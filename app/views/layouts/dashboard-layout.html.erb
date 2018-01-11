@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title><%= content_for?(:title) ? yield(:title) : default_title_content %></title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body id="<%= params[:controller] || "" %>" class="<%= params[:action] || "" %>">
+    <div class="app-dashboard shrink-medium">
+      <div class="row expanded app-dashboard-top-nav-bar">
+        <div class="columns medium-4">
+          <button data-toggle="app-dashboard-sidebar" class="menu-icon hide-for-medium"></button>
+          <%= image_tag "DiaperBase-Logo.png", alt: "DiaperBase Logo", id: "logo" %>
+        </div>
+        <div class="columns show-for-medium">
+          <div class="app-dashboard-search-bar-container">
+            <input class="app-dashboard-search" type="search" placeholder="Search">
+            <i class="app-dashboard-search-icon fa fa-search"></i>
+          </div>
+        </div>
+        <div class="columns shrink app-dashboard-top-bar-actions">
+          <!-- <button href="#" class="button hollow">Logout</button> -->
+          <a href="#" height="30" width="30" alt=""><i class="fa fa-info-circle"></i></a>
+
+          <ul class="menu show-for-medium" data-responsive-menu="drilldown medium-dropdown" data-parent-link="true" data-back-button="<li class='js-drilldown-back'><a tabindex='0'>Back</a></li>">
+              <li>Hello, <%= current_user.name %>!</li>
+              <li class="has-submenu">
+                <a href='javascript:void(0)'><i class="fa fa-gear"></i> Settings</a>
+                <ul class="submenu menu vertical" data-submenu>
+                  <li><%= navigation_link_to "Account Settings", edit_user_registration_path(organization_id: nil) %>        </li>
+                  <% with_options organization_id: current_user.organization.to_param do |with_org| %>
+                  <li><%= navigation_link_to "Manage users", with_org.users_path %></li>
+                  <li><%= navigation_link_to "Modify organization", with_org.edit_organization_path %></li>
+                  <% end %>
+                </ul>
+              </li>
+              <li>
+              <%= link_to('Log out', destroy_user_session_path(organization_id: nil), method: 'delete', class: "button hollow") %>
+            </li>
+            </ul>
+
+        </div>
+      </div>
+
+      <div class="app-dashboard-body off-canvas-wrapper">
+        <div id="app-dashboard-sidebar" class="app-dashboard-sidebar position-left off-canvas off-canvas-absolute reveal-for-medium" data-off-canvas>
+          <div class="app-dashboard-sidebar-title-area">
+            <div class="app-dashboard-close-sidebar">
+              <h3 class="app-dashboard-sidebar-block-title">Items</h3>
+              <!-- Close button -->
+              <button id="close-sidebar" data-app-dashboard-toggle-shrink class="app-dashboard-sidebar-close-button show-for-medium" aria-label="Close menu" type="button">
+                <span aria-hidden="true"><a href="#"><i class="large fa fa-angle-double-left"></i></a></span>
+              </button>
+            </div>
+            <div class="app-dashboard-open-sidebar">
+              <button id="open-sidebar" data-app-dashboard-toggle-shrink class="app-dashboard-open-sidebar-button show-for-medium" aria-label="open menu" type="button">
+                <span aria-hidden="true"><a href="#"><i class="large fa fa-angle-double-right"></i></a></span>
+              </button>
+            </div>
+          </div>
+          <div class="app-dashboard-sidebar-inner">
+  <ul class="multilevel-accordion-menu vertical menu" data-accordion-menu>
+    <li class="singleton"><%= navigation_link_to('Dashboard', dashboard_path) %></li>
+    <li class="has-submenu">
+      <a href="javascript:void(0)">Donations</a>
+      <ul class="menu vertical sublevel-1">
+        <li><%= navigation_link_to('All Donations', donations_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('New Donation', new_donation_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Repackaged Donation', scale_donations_path, class: "subitem") %></li>
+      </ul>
+    </li>
+    <li class="singleton"><%= navigation_link_to('Distributions', distributions_path) %></li>
+    <li class="has-submenu">
+      <a href="javascript:void(0)">Inventory</a>
+      <ul class="menu vertical sublevel-1">
+        <li><%= navigation_link_to('Items', items_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Barcode Items', barcode_items_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Storage Locations', storage_locations_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Adjustments', adjustments_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Transfers', transfers_path, class: "subitem") %></li>
+      </ul>
+    </li>
+    <li>
+      <a href="javascript:void(0)">Community</a>
+      <ul class="menu vertical sublevel-1">
+        <li><%= navigation_link_to('Donation Dropoff Locations', dropoff_locations_path, class: "subitem") %></li>
+        <li><%= navigation_link_to('Partner Agencies', partners_path, class: "subitem") %></li>
+        <li>
+          <%= navigation_link_to('Diaper Drive Participants',
+                                 diaper_drive_participants_path, class: "subitem") %>
+        </li>
+      </ul>
+    </li>
+    <% if current_user.organization_admin? %>
+    <li class="singleton "><%= navigation_link_to('Administration', admins_path) %></li>
+    <% end %>
+ </ul>
+<!--
+<ul class="multilevel-accordion-menu vertical menu" data-accordion-menu>
+  <li>
+    <a href="#">Item 1</a>
+    <ul class="menu vertical sublevel-1">
+      <li>
+        <a href="#">Sub-item 1</a>
+        <ul class="menu vertical sublevel-2">
+          <li><a class="subitem" href="#">Thing 1</a></li>
+          <li><a class="subitem" href="#">Thing 2</a></li>
+          <li><a class="subitem" href="#">Thing 3</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Sub-item 2</a>
+        <ul class="menu vertical sublevel-2">
+          <li>
+            <a href="#">Super-sub-item 1</a>
+            <ul class="menu vertical sublevel-3">
+              <li><a class="subitem" href="#">Thing 1</a></li>
+              <li><a class="subitem" href="#">Thing 2</a></li>
+            </ul>
+          </li>
+          <li><a class="subitem" href="#">Thing 2</a></li>
+        </ul>
+      </li>
+      <li><a class="subitem" href="#">Thing 1</a></li>
+      <li><a class="subitem" href="#">Thing 2</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#">Item 2</a>
+    <ul class="menu vertical sublevel-1">
+      <li><a class="subitem" href="#">Thing 1</a></li>
+      <li><a class="subitem" href="#">Thing 2</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#">Item 3</a>
+    <ul class="menu vertical sublevel-1">
+      <li><a class="subitem" href="#">Thing 1</a></li>
+      <li><a class="subitem" href="#">Thing 2</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#">Item 4</a>
+    <ul class="menu vertical sublevel-1">
+      <li>
+        <a href="#">Sub-item 3</a>
+        <ul class="menu vertical sublevel-2">
+          <li><a class="subitem" href="#">Thing 1</a></li>
+          <li><a class="subitem" href="#">Thing 2</a></li>
+        </ul>
+      </li>
+      <li><a class="subitem" href="#">Thing 1</a></li>
+      <li><a class="subitem" href="#">Thing 2</a></li>
+    </ul>
+  </li>
+</ul>
+-->
+<!--
+
+            <ul class="menu vertical">
+              <li><a href="#" class="is-active">
+                <i class="large fa fa-institution"></i><span class="app-dashboard-sidebar-text">Buildings</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-hourglass"></i><span class="app-dashboard-sidebar-text">Time</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-industry"></i><span class="app-dashboard-sidebar-text">Industry</span>
+              </a></li>
+              <li><a href="#" class="is-active">
+                <i class="large fa fa-institution"></i><span class="app-dashboard-sidebar-text">Buildings</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-hourglass"></i><span class="app-dashboard-sidebar-text">Time</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-industry"></i><span class="app-dashboard-sidebar-text">Industry</span>
+              </a></li>
+              <li><a href="#" class="is-active">
+                <i class="large fa fa-institution"></i><span class="app-dashboard-sidebar-text">Buildings</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-hourglass"></i><span class="app-dashboard-sidebar-text">Time</span>
+              </a></li>
+              <li><a>
+                <i class="large fa fa-industry"></i><span class="app-dashboard-sidebar-text">Industry</span>
+              </a></li>
+            </ul>
+-->
+          </div>
+        </div>
+
+        <div class="app-dashboard-body-content off-canvas-content" data-off-canvas-content>
+          <% if params[:controller].include?("admins") %>
+          <%= render partial: "layouts/admin_navbar" %>
+          <% else %>
+
+          <% end %>
+          <%= display_flash_messages %>
+          <%= yield %>
+
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>

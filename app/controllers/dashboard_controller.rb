@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   respond_to :html, :js
+  layout 'dashboard-layout'
 
   def index
     @recent_donations = current_organization.donations.includes(:line_items).during(helpers.selected_range).recent
